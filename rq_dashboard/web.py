@@ -24,6 +24,7 @@ from flask import Blueprint, current_app, render_template, url_for
 from redis import Redis, from_url
 from rq import (Queue, Worker, cancel_job, get_failed_queue, pop_connection,
                 push_connection, requeue_job)
+from rq.job import Job
 
 blueprint = Blueprint(
     'rq_dashboard',
@@ -148,7 +149,13 @@ def overview(queue_name, page):
 @blueprint.route('/job/<job_id>/cancel', methods=['POST'])
 @jsonify
 def cancel_job_view(job_id):
-    cancel_job(job_id)
+    job = Job.fetch(job_id, connection=current_app.redis_conn)
+
+    if job.status == 'failed':
+        job.delete()
+    else:
+        job.cancel()
+
     return dict(status='OK')
 
 
@@ -269,3 +276,4 @@ def list_workers():
 def inject_interval():
     interval = current_app.config.get('RQ_POLL_INTERVAL')
     return dict(poll_interval=interval)
+
