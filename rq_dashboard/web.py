@@ -33,8 +33,6 @@ blueprint = Blueprint(
     static_folder='static',
 )
 
-raise Exception('Fail')
-
 import sys
 from logging import getLogger, DEBUG, StreamHandler, Formatter
 
