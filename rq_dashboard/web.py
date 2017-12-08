@@ -36,6 +36,8 @@ blueprint = Blueprint(
 import sys
 from logging import getLogger, INFO, DEBUG, StreamHandler, Formatter
 
+print("Setting up logger...")
+
 log = getLogger('app')
 log.setLevel(DEBUG)
 
