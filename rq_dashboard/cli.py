@@ -7,9 +7,9 @@ import sys
 import click
 from flask import Flask, Response, request
 
-from . import default_settings
-from .version import VERSION
-from .web import blueprint
+from rq_dashboard import default_settings
+from rq_dashboard.version import VERSION
+from rq_dashboard.web import blueprint
 
 
 def add_basic_auth(blueprint, username, password, realm='RQ Dashboard'):

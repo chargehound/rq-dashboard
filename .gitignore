@@ -6,3 +6,5 @@ dump.rdb
 /build
 /.direnv
 ._*
+.idea/
+*.iml
