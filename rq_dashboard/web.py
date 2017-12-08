@@ -33,6 +33,17 @@ blueprint = Blueprint(
     static_folder='static',
 )
 
+import sys
+from logging import getLogger, INFO, DEBUG, StreamHandler, Formatter
+
+log = getLogger('app')
+log.setLevel(DEBUG)
+
+ch = StreamHandler(sys.stdout)
+ch.setLevel(DEBUG)
+formatter = Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+log.addHandler(ch)
 
 @blueprint.before_app_first_request
 def setup_rq_connection():
@@ -68,6 +79,11 @@ def jsonify(f):
             result_dict = f(*args, **kwargs)
         except Exception as e:
             result_dict = dict(status='error')
+            log.error(e)
+
+            from traceback import format_exc
+            log.error(format_exc())
+
             if current_app.config['DEBUG']:
                 result_dict['reason'] = str(e)
                 from traceback import format_exc
@@ -93,6 +109,8 @@ def serialize_date(dt):
 
 
 def serialize_job(job):
+    log.debug('Serializing job {} {}'.format(job.id, job.description))
+
     return dict(
         id=job.id,
         created_at=serialize_date(job.created_at),
@@ -220,6 +238,8 @@ def list_queues():
 @blueprint.route('/jobs/<queue_name>/<page>.json')
 @jsonify
 def list_jobs(queue_name, page):
+    log.debug('Fetching page {} of jobs on queue "{}"'.format(page, queue_name))
+
     current_page = int(page)
     queue = Queue(queue_name)
     per_page = 5
@@ -251,6 +271,8 @@ def list_jobs(queue_name, page):
     )
 
     offset = (current_page - 1) * per_page
+
+    log.debug('Serializing {} jobs at offset {}...'.format(per_page, offset))
     jobs = [serialize_job(job) for job in queue.get_jobs(offset, per_page)]
     return dict(name=queue.name, jobs=jobs, pagination=pagination)
 
