@@ -37,7 +37,7 @@ import sys
 from logging import getLogger, INFO, StreamHandler, Formatter
 
 log = getLogger('app')
-log.setLevel(DEBUG)
+log.setLevel(INFO)
 
 ch = StreamHandler(sys.stdout)
 ch.setLevel(INFO)
