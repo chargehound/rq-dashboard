@@ -117,7 +117,7 @@ def run(
     if extra_path:
         sys.path += list(extra_path)
 
-    click.echo('RQ Dashboard version {0}'.format(VERSION))
+    click.echo('RQ Dashboard version {0} (local fork)'.format(VERSION))
     app = make_flask_app(config, username, password, url_prefix)
     if redis_url:
         app.config['REDIS_URL'] = redis_url
