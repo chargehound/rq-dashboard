@@ -33,10 +33,10 @@ blueprint = Blueprint(
     static_folder='static',
 )
 
-import sys
-from logging import getLogger, INFO, DEBUG, StreamHandler, Formatter
+raise Exception('Fail')
 
-print("Setting up logger...")
+import sys
+from logging import getLogger, DEBUG, StreamHandler, Formatter
 
 log = getLogger('app')
 log.setLevel(DEBUG)
