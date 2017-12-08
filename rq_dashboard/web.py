@@ -34,13 +34,13 @@ blueprint = Blueprint(
 )
 
 import sys
-from logging import getLogger, DEBUG, StreamHandler, Formatter
+from logging import getLogger, INFO, StreamHandler, Formatter
 
 log = getLogger('app')
 log.setLevel(DEBUG)
 
 ch = StreamHandler(sys.stdout)
-ch.setLevel(DEBUG)
+ch.setLevel(INFO)
 formatter = Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 ch.setFormatter(formatter)
 log.addHandler(ch)
